@@ -37,3 +37,19 @@ if url:
                 # Download to a temporary file
                 with tempfile.NamedTemporaryFile(delete=False, suffix=".mp4") as tmp_file:
                     file_path = selected_stream.download(
+                        output_path=os.path.dirname(tmp_file.name),
+                        filename=os.path.basename(tmp_file.name)
+                    )
+
+                # Show download button after file is ready
+                with open(file_path, "rb") as f:
+                    st.download_button(
+                        label="⬇️ Download Video",
+                        data=f,
+                        file_name=yt.title.replace(" ", "_") + ".mp4",
+                        mime="video/mp4"
+                    )
+                os.remove(file_path)
+
+    except Exception as e:
+        st.error(f"❌ Error: {str(e)}")
